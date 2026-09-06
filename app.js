@@ -63,6 +63,14 @@ let products = [
   }
 ];
 
+let orders = [
+  { id: "ORD-1048", customer: "Maya Patel", date: "Sep 05, 2026", items: 2, total: 799.98, status: "Processing" },
+  { id: "ORD-1047", customer: "Ethan Brooks", date: "Sep 04, 2026", items: 1, total: 49.00, status: "Pending" },
+  { id: "ORD-1046", customer: "Sofia Chen", date: "Sep 03, 2026", items: 3, total: 314.49, status: "Shipped" },
+  { id: "ORD-1045", customer: "Noah Williams", date: "Sep 02, 2026", items: 1, total: 199.99, status: "Delivered" },
+  { id: "ORD-1044", customer: "Ava Johnson", date: "Sep 01, 2026", items: 2, total: 60.99, status: "Delivered" }
+];
+
 // DOM Elements - Authentication & Shell
 const loginView = document.getElementById("login-view");
 const dashboardView = document.getElementById("dashboard-view");
@@ -96,6 +104,15 @@ const statTotalProducts = document.getElementById("stat-total-products");
 const summaryTotalProducts = document.getElementById("summary-total-products");
 const summaryInStock = document.getElementById("summary-in-stock");
 const summaryLowStock = document.getElementById("summary-low-stock");
+const ordersTableBody = document.getElementById("orders-table-body");
+const ordersEmptyState = document.getElementById("orders-empty-state");
+const orderSearchInput = document.getElementById("order-search-input");
+const orderStatusFilter = document.getElementById("order-status-filter");
+const orderCountBadge = document.getElementById("order-count-badge");
+const summaryTotalOrders = document.getElementById("summary-total-orders");
+const summaryPendingOrders = document.getElementById("summary-pending-orders");
+const summaryDeliveredOrders = document.getElementById("summary-delivered-orders");
+const summaryOrderRevenue = document.getElementById("summary-order-revenue");
 
 // DOM Elements - Add Product Modal
 const openAddProductBtn = document.getElementById("open-add-product-btn");
@@ -163,6 +180,12 @@ function initEventListeners() {
   }
   if (categoryFilter) {
     categoryFilter.addEventListener("change", filterAndRenderProducts);
+  }
+  if (orderSearchInput) {
+    orderSearchInput.addEventListener("input", filterAndRenderOrders);
+  }
+  if (orderStatusFilter) {
+    orderStatusFilter.addEventListener("change", filterAndRenderOrders);
   }
 
   // Modal Listeners
@@ -248,6 +271,7 @@ function showDashboard(session) {
   // Initialize tabs & products view
   switchTab("tab-overview");
   renderProducts(products);
+  renderOrders(orders);
 }
 
 function showLogin() {
@@ -410,6 +434,68 @@ function updateMetrics() {
   if (summaryInStock) summaryInStock.textContent = inStock;
   if (summaryLowStock) summaryLowStock.textContent = lowOrOut;
 }
+
+function getOrderStatusClass(status) {
+  if (status === "Delivered") return "order-status-delivered";
+  if (status === "Canceled") return "order-status-canceled";
+  if (status === "Refunded") return "order-status-refunded";
+  if (status === "Shipped") return "order-status-shipped";
+  if (status === "Processing") return "order-status-processing";
+  return "order-status-pending";
+}
+
+function renderOrders(itemsToRender) {
+  if (!ordersTableBody) return;
+  ordersTableBody.innerHTML = "";
+  if (ordersEmptyState) ordersEmptyState.classList.toggle("hidden", itemsToRender.length > 0);
+
+  itemsToRender.forEach((order) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><strong>${escapeHtml(order.id)}</strong></td>
+      <td>${escapeHtml(order.customer)}</td>
+      <td>${escapeHtml(order.date)}</td>
+      <td>${order.items} ${order.items === 1 ? "item" : "items"}</td>
+      <td><strong>$${Number(order.total).toFixed(2)}</strong></td>
+      <td>
+        <select class="order-status-select ${getOrderStatusClass(order.status)}" aria-label="Update status for ${escapeHtml(order.id)}" onchange="updateOrderStatus('${order.id}', this.value)">
+          ${["Pending", "Processing", "Shipped", "Delivered", "Canceled", "Refunded"].map((status) => `<option value="${status}" ${status === order.status ? "selected" : ""}>${status}</option>`).join("")}
+        </select>
+      </td>
+    `;
+    ordersTableBody.appendChild(row);
+  });
+  updateOrderMetrics();
+}
+
+function filterAndRenderOrders() {
+  const query = (orderSearchInput ? orderSearchInput.value : "").trim().toLowerCase();
+  const selectedStatus = orderStatusFilter ? orderStatusFilter.value : "all";
+  const filtered = orders.filter((order) => {
+    const matchesQuery = order.id.toLowerCase().includes(query) || order.customer.toLowerCase().includes(query);
+    return matchesQuery && (selectedStatus === "all" || order.status === selectedStatus);
+  });
+  renderOrders(filtered);
+}
+
+function updateOrderMetrics() {
+  const total = orders.length;
+  const pending = orders.filter((order) => order.status === "Pending" || order.status === "Processing").length;
+  const delivered = orders.filter((order) => order.status === "Delivered").length;
+  const revenue = orders.reduce((sum, order) => sum + Number(order.total), 0);
+  if (orderCountBadge) orderCountBadge.textContent = total;
+  if (summaryTotalOrders) summaryTotalOrders.textContent = total;
+  if (summaryPendingOrders) summaryPendingOrders.textContent = pending;
+  if (summaryDeliveredOrders) summaryDeliveredOrders.textContent = delivered;
+  if (summaryOrderRevenue) summaryOrderRevenue.textContent = `$${revenue.toFixed(2)}`;
+}
+
+window.updateOrderStatus = function (id, status) {
+  const order = orders.find((item) => item.id === id);
+  if (!order) return;
+  order.status = status;
+  filterAndRenderOrders();
+};
 
 function handleAddProduct(e) {
   e.preventDefault();

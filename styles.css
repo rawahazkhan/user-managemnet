@@ -584,6 +584,10 @@ body {
   margin-bottom: 20px;
 }
 
+.order-stats-grid .stat-card:last-child .stat-value {
+  font-size: 1.2rem;
+}
+
 .stat-card.mini {
   padding: 14px 18px;
 }
@@ -814,6 +818,71 @@ body {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
+
+/* Orders Table */
+.orders-table-wrap {
+  overflow-x: auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+  text-align: left;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.orders-table th {
+  background: #f8fafc;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.orders-table td {
+  color: var(--text-muted);
+}
+
+.orders-table td strong {
+  color: var(--text-main);
+}
+
+.orders-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.orders-table tbody tr:hover {
+  background: var(--primary-light);
+}
+
+.order-status-select {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.order-status-pending { background: #fffbeb; color: #b45309; }
+.order-status-processing { background: var(--primary-light); color: var(--primary); }
+.order-status-shipped { background: #f0fdf4; color: #15803d; }
+.order-status-delivered { background: var(--success-bg); color: #047857; }
+.order-status-canceled { background: var(--danger-bg); color: var(--danger); }
+.order-status-refunded { background: #fef3c7; color: #92400e; }
 
 /* ====================
    MODAL DIALOG
