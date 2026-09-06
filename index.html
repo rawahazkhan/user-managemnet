@@ -112,6 +112,13 @@
             Products
             <span class="tab-badge" id="product-count-badge">6</span>
           </button>
+          <button class="tab-btn" data-tab="tab-reports" role="tab" aria-selected="false" id="btn-tab-reports">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="2" x2="12" y2="22"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            Reports
+          </button>
         </nav>
 
         <!-- Tab 1: Overview Pane -->
@@ -272,6 +279,137 @@
             <div class="empty-icon">🔍</div>
             <h3>No products found</h3>
             <p>Try adjusting your search query or category filter.</p>
+          </div>
+        </div>
+
+        <!-- Tab 3: Reports Pane -->
+        <div id="tab-reports" class="tab-pane hidden" role="tabpanel">
+          <!-- Reports Header -->
+          <div class="reports-header">
+            <div>
+              <h2>Reports & Analytics</h2>
+              <p class="subtitle">Monitor sales performance, revenue trends, and financial metrics</p>
+            </div>
+          </div>
+
+          <!-- Reports Content Grid -->
+          <div class="reports-grid">
+            <!-- Sales Report Section -->
+            <div class="report-section card">
+              <div class="report-header">
+                <div class="report-icon-wrapper">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v20M2 12h20"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Sales Report</h3>
+                  <p class="report-description">Product sales performance and volume</p>
+                </div>
+              </div>
+              <div class="report-content">
+                <div class="sales-metrics">
+                  <div class="metric-item">
+                    <span class="metric-label">Total Sales</span>
+                    <span class="metric-value" id="total-sales-value">0</span>
+                    <span class="metric-unit">units</span>
+                  </div>
+                  <div class="metric-item">
+                    <span class="metric-label">Top Product</span>
+                    <span class="metric-value" id="top-product-name">—</span>
+                  </div>
+                </div>
+                <div class="sales-table-wrapper">
+                  <table class="sales-table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sales-table-body">
+                      <!-- Populated by JavaScript -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Revenue Section -->
+            <div class="report-section card">
+              <div class="report-header">
+                <div class="report-icon-wrapper revenue-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <path d="M12 1v6m0 6v6"></path>
+                    <path d="M4.22 4.22l4.24 4.24m5.08 5.08l4.24 4.24"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Revenue</h3>
+                  <p class="report-description">Total revenue and financial performance</p>
+                </div>
+              </div>
+              <div class="report-content">
+                <div class="revenue-metrics-grid">
+                  <div class="revenue-metric">
+                    <div class="revenue-metric-label">Total Revenue</div>
+                    <div class="revenue-metric-value" id="total-revenue-value">$0.00</div>
+                    <div class="revenue-metric-trend">From inventory value</div>
+                  </div>
+                  <div class="revenue-metric">
+                    <div class="revenue-metric-label">Avg Order Value</div>
+                    <div class="revenue-metric-value" id="avg-order-value">$0.00</div>
+                    <div class="revenue-metric-trend">Per product line</div>
+                  </div>
+                  <div class="revenue-metric">
+                    <div class="revenue-metric-label">Price Range</div>
+                    <div class="revenue-metric-value" id="price-range">$0 - $0</div>
+                    <div class="revenue-metric-trend">Min to max price</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profit & Loss Section -->
+            <div class="report-section card">
+              <div class="report-header">
+                <div class="report-icon-wrapper pl-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                    <polyline points="17 6 23 6 23 12"></polyline>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Profit & Loss</h3>
+                  <p class="report-description">Financial summary and performance analysis</p>
+                </div>
+              </div>
+              <div class="report-content">
+                <div class="pl-summary">
+                  <div class="pl-row revenue-row">
+                    <span class="pl-label">Total Revenue</span>
+                    <span class="pl-value" id="pl-revenue">$0.00</span>
+                  </div>
+                  <div class="pl-row expense-row">
+                    <span class="pl-label">Operating Costs (20%)</span>
+                    <span class="pl-value" id="pl-expenses">$0.00</span>
+                  </div>
+                  <div class="pl-divider"></div>
+                  <div class="pl-row profit-row">
+                    <span class="pl-label">Net Profit</span>
+                    <span class="pl-value profit-value" id="pl-profit">$0.00</span>
+                  </div>
+                  <div class="pl-row margin-row">
+                    <span class="pl-label">Profit Margin</span>
+                    <span class="pl-value" id="pl-margin">0%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

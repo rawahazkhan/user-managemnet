@@ -899,3 +899,304 @@ body {
   width: auto;
 }
 
+/* ====================
+   REPORTS TAB
+   ==================== */
+.reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reports-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.reports-header .subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.report-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.report-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.report-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.report-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  background-color: #dbeafe;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.report-icon-wrapper.revenue-icon {
+  background-color: #d1fae5;
+  color: var(--success);
+}
+
+.report-icon-wrapper.pl-icon {
+  background-color: #fed7aa;
+  color: #f59e0b;
+}
+
+.report-header h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.report-description {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.report-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Sales Report Styles */
+.sales-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.metric-item {
+  background-color: #f1f5f9;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.metric-label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.metric-unit {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.sales-table-wrapper {
+  overflow-x: auto;
+}
+
+.sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.sales-table thead {
+  background-color: #f1f5f9;
+}
+
+.sales-table th {
+  padding: 10px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sales-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.sales-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.sales-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table-category {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.table-price {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.table-value {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+/* Revenue Report Styles */
+.revenue-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.revenue-metric {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  padding: 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid #bbf7d0;
+}
+
+.revenue-metric-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.revenue-metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--success);
+  margin-bottom: 4px;
+}
+
+.revenue-metric-trend {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Profit & Loss Styles */
+.pl-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pl-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pl-row:last-child {
+  border-bottom: none;
+}
+
+.pl-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.pl-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.pl-divider {
+  height: 2px;
+  background-color: var(--border-color);
+  margin: 8px 0;
+}
+
+.profit-row .pl-value {
+  font-size: 1.3rem;
+  color: var(--success);
+}
+
+.profit-value {
+  color: var(--success) !important;
+}
+
+.margin-row .pl-value {
+  color: #8b5cf6;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-table {
+    font-size: 0.85rem;
+  }
+
+  .sales-table th,
+  .sales-table td {
+    padding: 8px 4px;
+  }
+
+  .metric-value {
+    font-size: 1.3rem;
+  }
+}
+

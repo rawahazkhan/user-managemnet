@@ -136,6 +136,13 @@ function initEventListeners() {
     btn.addEventListener("click", () => {
       const targetTabId = btn.getAttribute("data-tab");
       switchTab(targetTabId);
+      
+      // Render reports when reports tab is clicked
+      if (targetTabId === "tab-reports") {
+        setTimeout(() => {
+          renderAllReports();
+        }, 50);
+      }
     });
   });
 
@@ -475,4 +482,167 @@ function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
   return div.innerHTML;
+}
+
+// ====================
+// REPORTS CONTROLLER
+// ====================
+
+// DOM Elements - Reports
+const salesTableBody = document.getElementById("sales-table-body");
+const totalSalesValue = document.getElementById("total-sales-value");
+const topProductName = document.getElementById("top-product-name");
+const totalRevenueValue = document.getElementById("total-revenue-value");
+const avgOrderValue = document.getElementById("avg-order-value");
+const priceRange = document.getElementById("price-range");
+const plRevenue = document.getElementById("pl-revenue");
+const plExpenses = document.getElementById("pl-expenses");
+const plProfit = document.getElementById("pl-profit");
+const plMargin = document.getElementById("pl-margin");
+
+function calculateSalesMetrics() {
+  if (products.length === 0) {
+    return {
+      totalUnits: 0,
+      topProduct: null,
+      salesByProduct: []
+    };
+  }
+
+  const totalUnits = products.reduce((sum, p) => sum + p.stock, 0);
+  const topProduct = products.reduce((max, p) => 
+    p.stock > (max?.stock || 0) ? p : max
+  );
+
+  const salesByProduct = products
+    .sort((a, b) => b.stock - a.stock)
+    .map(p => ({
+      name: p.name,
+      category: p.category,
+      stock: p.stock,
+      price: p.price,
+      value: p.stock * p.price
+    }));
+
+  return {
+    totalUnits,
+    topProduct: topProduct.name,
+    salesByProduct
+  };
+}
+
+function calculateRevenueMetrics() {
+  if (products.length === 0) {
+    return {
+      totalRevenue: 0,
+      avgOrderValue: 0,
+      minPrice: 0,
+      maxPrice: 0
+    };
+  }
+
+  const totalRevenue = products.reduce((sum, p) => sum + (p.stock * p.price), 0);
+  const avgOrderValue = products.reduce((sum, p) => sum + p.price, 0) / products.length;
+  const prices = products.map(p => p.price);
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+
+  return {
+    totalRevenue,
+    avgOrderValue,
+    minPrice,
+    maxPrice
+  };
+}
+
+function calculateProfitLoss() {
+  const { totalRevenue } = calculateRevenueMetrics();
+  const operatingCostPercentage = 0.20; // 20% operating costs
+  const expenses = totalRevenue * operatingCostPercentage;
+  const profit = totalRevenue - expenses;
+  const margin = totalRevenue > 0 ? (profit / totalRevenue) * 100 : 0;
+
+  return {
+    revenue: totalRevenue,
+    expenses,
+    profit,
+    margin
+  };
+}
+
+function renderSalesReport() {
+  const metrics = calculateSalesMetrics();
+
+  // Update top level metrics
+  if (totalSalesValue) {
+    totalSalesValue.textContent = metrics.totalUnits.toLocaleString();
+  }
+  if (topProductName) {
+    topProductName.textContent = metrics.topProduct || "—";
+  }
+
+  // Render sales table
+  if (salesTableBody) {
+    salesTableBody.innerHTML = "";
+
+    if (metrics.salesByProduct.length > 0) {
+      metrics.salesByProduct.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${escapeHtml(item.name)}</td>
+          <td><span class="table-category">${escapeHtml(item.category)}</span></td>
+          <td>${item.stock}</td>
+          <td><span class="table-price">$${item.price.toFixed(2)}</span></td>
+          <td><span class="table-value">$${item.value.toFixed(2)}</span></td>
+        `;
+        salesTableBody.appendChild(row);
+      });
+    } else {
+      const emptyRow = document.createElement("tr");
+      emptyRow.innerHTML = `<td colspan="5" style="text-align: center; padding: 20px; color: var(--text-muted);">No products available</td>`;
+      salesTableBody.appendChild(emptyRow);
+    }
+  }
+}
+
+function renderRevenueReport() {
+  const metrics = calculateRevenueMetrics();
+
+  if (totalRevenueValue) {
+    totalRevenueValue.textContent = `$${metrics.totalRevenue.toFixed(2)}`;
+  }
+
+  if (avgOrderValue) {
+    avgOrderValue.textContent = `$${metrics.avgOrderValue.toFixed(2)}`;
+  }
+
+  if (priceRange) {
+    priceRange.textContent = `$${metrics.minPrice.toFixed(0)} - $${metrics.maxPrice.toFixed(2)}`;
+  }
+}
+
+function renderProfitLossReport() {
+  const pl = calculateProfitLoss();
+
+  if (plRevenue) {
+    plRevenue.textContent = `$${pl.revenue.toFixed(2)}`;
+  }
+
+  if (plExpenses) {
+    plExpenses.textContent = `$${pl.expenses.toFixed(2)}`;
+  }
+
+  if (plProfit) {
+    plProfit.textContent = `$${pl.profit.toFixed(2)}`;
+  }
+
+  if (plMargin) {
+    plMargin.textContent = `${pl.margin.toFixed(1)}%`;
+  }
+}
+
+function renderAllReports() {
+  renderSalesReport();
+  renderRevenueReport();
+  renderProfitLossReport();
 }
