@@ -1,0 +1,13 @@
+{
+  "name": "user-management-login",
+  "version": "1.0.0",
+  "description": "Simple login page and landing dashboard with minimal code",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["login", "dashboard", "minimal"],
+  "author": "",
+  "license": "ISC"
+}

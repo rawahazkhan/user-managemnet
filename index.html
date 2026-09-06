@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Portal - Login & Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Login View -->
+    <main id="login-view" class="view-section">
+      <div class="card login-card">
+        <div class="card-header">
+          <div class="brand-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </div>
+          <h1>Welcome Back</h1>
+          <p class="subtitle">Enter your credentials to access your dashboard</p>
+        </div>
+
+        <form id="login-form" novalidate>
+          <div id="error-banner" class="alert alert-error hidden" role="alert">
+            <span class="alert-icon">⚠️</span>
+            <span id="error-message">Invalid username or password</span>
+          </div>
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              placeholder="e.g. admin" 
+              autocomplete="username" 
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-wrapper">
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="••••••••" 
+                autocomplete="current-password" 
+                required 
+              />
+              <button type="button" id="toggle-password" class="toggle-pwd-btn" aria-label="Toggle password visibility">
+                👁️
+              </button>
+            </div>
+          </div>
+
+          <div class="demo-credentials">
+            <span>Demo: <strong>admin</strong> / <strong>admin123</strong></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="login-btn">
+            Sign In
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Dashboard View -->
+    <main id="dashboard-view" class="view-section hidden">
+      <div class="dashboard-container">
+        <!-- Top Navbar -->
+        <header class="dashboard-nav">
+          <div class="nav-brand">
+            <div class="brand-icon small">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </div>
+            <h2>Admin Portal</h2>
+          </div>
+          <div class="nav-user">
+            <div class="avatar" id="nav-avatar">A</div>
+            <span class="nav-username" id="dashboard-username">Admin</span>
+            <button id="logout-btn" class="btn btn-outline" title="Log out of session">
+              Log Out
+            </button>
+          </div>
+        </header>
+
+        <!-- Dashboard Tabs Navigation -->
+        <nav class="dashboard-tabs" role="tablist" aria-label="Dashboard views">
+          <button class="tab-btn active" data-tab="tab-overview" role="tab" aria-selected="true" id="btn-tab-overview">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Overview
+          </button>
+          <button class="tab-btn" data-tab="tab-products" role="tab" aria-selected="false" id="btn-tab-products">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            Products
+            <span class="tab-badge" id="product-count-badge">6</span>
+          </button>
+        </nav>
+
+        <!-- Tab 1: Overview Pane -->
+        <div id="tab-overview" class="tab-pane active" role="tabpanel">
+          <!-- Welcome Banner -->
+          <section class="welcome-banner">
+            <div>
+              <h1>Dashboard Overview</h1>
+              <p>Welcome back, <strong id="welcome-user-name">User</strong>! Here is what's happening with your account today.</p>
+            </div>
+            <div class="login-timestamp" id="session-timestamp">
+              Logged in: Just now
+            </div>
+          </section>
+
+          <!-- Stat Cards Grid -->
+          <section class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">System Status</span>
+              <div class="stat-value">
+                <span class="status-indicator"></span> Active
+              </div>
+              <p class="stat-meta">All services operational</p>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Assigned Role</span>
+              <div class="stat-value" id="user-role">Administrator</div>
+              <p class="stat-meta">Full system permissions</p>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Active Session</span>
+              <div class="stat-value" id="session-counter">0m 0s</div>
+              <p class="stat-meta">Local session storage active</p>
+            </div>
+
+            <div class="stat-card">
+              <span class="stat-label">Total Catalog Products</span>
+              <div class="stat-value" id="stat-total-products">6</div>
+              <p class="stat-meta">Manageable in Products tab</p>
+            </div>
+          </section>
+
+          <!-- Content Area -->
+          <section class="dashboard-content">
+            <div class="card recent-activity">
+              <div class="section-header">
+                <h3>Recent System Activity</h3>
+                <span class="badge">Live</span>
+              </div>
+              <ul class="activity-list" id="activity-list">
+                <li class="activity-item">
+                  <span class="activity-bullet"></span>
+                  <div class="activity-details">
+                    <p class="activity-text">Successful login recorded</p>
+                    <span class="activity-time">A few seconds ago</span>
+                  </div>
+                </li>
+                <li class="activity-item">
+                  <span class="activity-bullet"></span>
+                  <div class="activity-details">
+                    <p class="activity-text">Security policy verified</p>
+                    <span class="activity-time">10 minutes ago</span>
+                  </div>
+                </li>
+                <li class="activity-item">
+                  <span class="activity-bullet"></span>
+                  <div class="activity-details">
+                    <p class="activity-text">Database backup completed</p>
+                    <span class="activity-time">1 hour ago</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="card quick-actions">
+              <div class="section-header">
+                <h3>Quick Actions</h3>
+              </div>
+              <div class="actions-group">
+                <button class="action-btn" id="quick-view-products-btn">
+                  📦 View Products Catalog
+                </button>
+                <button class="action-btn" id="quick-add-product-btn">
+                  ➕ Add New Product
+                </button>
+                <button class="action-btn" onclick="alert('Action: Activity Reports generated')">
+                  📊 Activity Reports
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Tab 2: Products Pane -->
+        <div id="tab-products" class="tab-pane hidden" role="tabpanel">
+          <!-- Products Header -->
+          <div class="products-header">
+            <div>
+              <h2>Products Management</h2>
+              <p class="subtitle">Browse, filter, and add items to your product inventory</p>
+            </div>
+            <button class="btn btn-primary btn-add-product" id="open-add-product-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Add Product
+            </button>
+          </div>
+
+          <!-- Product Summary Metrics -->
+          <section class="product-stats-grid">
+            <div class="stat-card mini">
+              <span class="stat-label">Total Products</span>
+              <div class="stat-value" id="summary-total-products">6</div>
+            </div>
+            <div class="stat-card mini">
+              <span class="stat-label">In Stock</span>
+              <div class="stat-value text-success" id="summary-in-stock">5</div>
+            </div>
+            <div class="stat-card mini">
+              <span class="stat-label">Low / Out of Stock</span>
+              <div class="stat-value text-warning" id="summary-low-stock">1</div>
+            </div>
+          </section>
+
+          <!-- Toolbar: Search and Filter -->
+          <div class="products-toolbar">
+            <div class="search-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="product-search-input" placeholder="Search products by name or category..." />
+            </div>
+
+            <div class="filter-box">
+              <label for="category-filter" class="sr-only">Category:</label>
+              <select id="category-filter">
+                <option value="all">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Software">Software</option>
+                <option value="Office">Office</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="products-grid" id="products-grid">
+            <!-- Dynamically populated via app.js -->
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state hidden" id="products-empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>No products found</h3>
+            <p>Try adjusting your search query or category filter.</p>
+          </div>
+        </div>
+
+        <!-- Add Product Modal -->
+        <div id="add-product-modal" class="modal-backdrop hidden">
+          <div class="modal-card">
+            <div class="modal-header">
+              <h3>Add New Product</h3>
+              <button type="button" class="close-modal-btn" id="close-modal-btn">&times;</button>
+            </div>
+            <form id="add-product-form">
+              <div class="form-group">
+                <label for="prod-name">Product Name *</label>
+                <input type="text" id="prod-name" placeholder="e.g. Wireless Ergonomic Mouse" required />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="prod-category">Category *</label>
+                  <select id="prod-category" required>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Software">Software</option>
+                    <option value="Office">Office</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="prod-price">Price ($) *</label>
+                  <input type="number" id="prod-price" min="0.01" step="0.01" placeholder="49.99" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="prod-stock">Stock Quantity *</label>
+                  <input type="number" id="prod-stock" min="0" step="1" placeholder="25" required />
+                </div>
+                <div class="form-group">
+                  <label for="prod-status">Stock Status</label>
+                  <select id="prod-status">
+                    <option value="In Stock">In Stock</option>
+                    <option value="Low Stock">Low Stock</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-actions">
+                <button type="button" class="btn btn-outline" id="cancel-modal-btn">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Product</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
